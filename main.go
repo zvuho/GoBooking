@@ -13,27 +13,36 @@ func main() {
 	fmt.Printf("We have a total of %v and %v are available.\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your shit here:")
 
-	var firstName string
-	var lastName string
-	var email string
-	var userTickets int
+	var bookings []string
 
-	fmt.Println("Enter your first name:")
+	for {
+		var firstName string
+		var lastName string
+		var email string
+		var userTickets int
 
-	fmt.Scan(&firstName)
+		fmt.Println("Enter your first name:")
 
-	fmt.Println("Enter your last name:")
+		fmt.Scan(&firstName)
 
-	fmt.Scan(&lastName)
+		fmt.Println("Enter your last name:")
 
-	fmt.Println("Enter your email name:")
+		fmt.Scan(&lastName)
 
-	fmt.Scan(&email)
+		fmt.Println("Enter your email name:")
 
-	fmt.Println("How many tickets do you need:")
+		fmt.Scan(&email)
 
-	fmt.Scan(&userTickets)
+		fmt.Println("How many tickets do you need:")
 
-	fmt.Printf("User %v has %v tickets", userName, userTickets)
+		fmt.Scan(&userTickets)
+
+		remainingTickets = remainingTickets - uint(userTickets)
+
+		bookings = append(bookings, firstName+" "+lastName)
+		fmt.Printf("Thank you %v %v for booking %v tickets. You will recieve a confirmation to %v", firstName, lastName, userTickets, email)
+		fmt.Printf("%v tickets remaining for %v", remainingTickets, conferenceName)
+
+	}
 
 }
