@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
 	conferenceName := "Go Conference"
@@ -37,12 +40,30 @@ func main() {
 
 		fmt.Scan(&userTickets)
 
+		if userTickets < int(remainingTickets) {
+			fmt.Printf("We only have %v tickets remaining so you can't book %v tickets".remainingTickets, userTickets)
+			break
+		}
 		remainingTickets = remainingTickets - uint(userTickets)
 
 		bookings = append(bookings, firstName+" "+lastName)
-		fmt.Printf("Thank you %v %v for booking %v tickets. You will recieve a confirmation to %v", firstName, lastName, userTickets, email)
-		fmt.Printf("%v tickets remaining for %v", remainingTickets, conferenceName)
+		fmt.Printf("Thank you %v %v for booking %v tickets. You will recieve a confirmation to %v\n", firstName, lastName, userTickets, email)
+		fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
 
+		firstNames := []string{}
+
+		for _, booking := range bookings {
+
+			var names = strings.Fields(booking)
+			firstNames = append(firstNames, names[0])
+		}
+		fmt.Printf("The first names of bookings are %v \n", firstNames)
+
+		noTicketsLeft := remainingTickets == 0
+		if noTicketsLeft {
+			fmt.Printf("The %v is booked out", conferenceName)
+			break
+		}
 	}
 
 }
