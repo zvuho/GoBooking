@@ -42,7 +42,7 @@ func main() {
 
 		if userTickets < int(remainingTickets) {
 			fmt.Printf("We only have %v tickets remaining so you can't book %v tickets", remainingTickets, userTickets)
-			break
+			continue
 		}
 		remainingTickets = remainingTickets - uint(userTickets)
 
