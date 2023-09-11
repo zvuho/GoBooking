@@ -5,14 +5,15 @@ import (
 	"strings"
 )
 
+const conferenceTickets = 50
+
+var conferenceName = "Go Conference"
+var remainingTickets uint = 50
+var bookings []string
+
 func main() {
 
-	conferenceName := "Go Conference"
-	const conferenceTickets = 50
-	var remainingTickets uint = 50
-	var bookings []string
-
-	greetUsers(conferenceName, conferenceTickets, remainingTickets)
+	greetUsers()
 
 	firstName, lastName, email, userTickets, city := getUserInput()
 
@@ -35,9 +36,9 @@ func main() {
 
 		if isValidName && isValidEmail && isValidNumTickets {
 
-			bookTicket(remainingTickets, userTickets, bookings, firstName, lastName, email, conferenceName)
+			bookTicket(remainingTickets, userTickets, firstName, lastName, email, conferenceName)
 
-			var firstNames = getFirstNames(bookings)
+			var firstNames = getFirstNames()
 
 			fmt.Printf("The first names of bookings are %v \n", firstNames)
 
@@ -63,7 +64,7 @@ func main() {
 
 }
 
-func greetUsers(conferenceName string, conferenceTickets int, remainingTickets uint) {
+func greetUsers() {
 
 	fmt.Printf("Conference Tickests is %T, Remainig tickets is %T, Conference name is %T.\n", conferenceTickets, remainingTickets, conferenceName)
 
@@ -73,7 +74,7 @@ func greetUsers(conferenceName string, conferenceTickets int, remainingTickets u
 
 }
 
-func getFirstNames(bookings []string) []string {
+func getFirstNames() []string {
 
 	firstNames := []string{}
 
@@ -126,7 +127,7 @@ func getUserInput() (string, string, string, int, string) {
 	return firstName, lastName, email, userTickets, city
 }
 
-func bookTicket(remainingTickets uint, userTickets int, bookings []string, firstName string, lastName string, email string, conferenceName string) {
+func bookTicket(remainingTickets uint, userTickets int, firstName string, lastName string, email string, conferenceName string) {
 
 	remainingTickets = remainingTickets - uint(userTickets)
 
