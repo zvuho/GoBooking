@@ -6,23 +6,20 @@ import (
 )
 
 func main() {
+
 	conferenceName := "Go Conference"
 	const conferenceTickets = 50
 	var remainingTickets uint = 50
-
-	fmt.Printf("Conference Tickests is %T, Remainig tickets is %T, Conference name is %T.\n", conferenceTickets, remainingTickets, conferenceName)
-
-	fmt.Printf("Welcome to %v booking application.\n", conferenceName)
-	fmt.Printf("We have a total of %v and %v are available.\n", conferenceTickets, remainingTickets)
-	fmt.Println("Get your shit here:")
-
 	var bookings []string
+
+	greetUsers(conferenceName, conferenceTickets, remainingTickets)
 
 	for {
 		var firstName string
 		var lastName string
 		var email string
 		var userTickets int
+		var city string
 
 		fmt.Println("Enter your first name:")
 
@@ -46,6 +43,19 @@ func main() {
 
 		fmt.Scan(&userTickets)
 
+		switch city {
+		case "London", "Berlin":
+			//exec code
+		case "Singapore", "Hong Kong":
+			//exec other code
+		case "New York":
+			//exec code for London conference
+		case "Mexico City":
+			//exec code for London conference
+		default:
+			fmt.Println("No valid city selected")
+		}
+
 		if isValidName && isValidEmail && isValidNumTickets {
 
 			remainingTickets = remainingTickets - uint(userTickets)
@@ -54,13 +64,8 @@ func main() {
 			fmt.Printf("Thank you %v %v for booking %v tickets. You will recieve a confirmation to %v\n", firstName, lastName, userTickets, email)
 			fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
 
-			firstNames := []string{}
+			var firstNames = getFirstNames(bookings)
 
-			for _, booking := range bookings {
-
-				var names = strings.Fields(booking)
-				firstNames = append(firstNames, names[0])
-			}
 			fmt.Printf("The first names of bookings are %v \n", firstNames)
 
 			noTicketsLeft := remainingTickets == 0
@@ -71,16 +76,38 @@ func main() {
 
 		} else {
 			if !isValidName {
-				fmt.Println("Your input data is invalid. Try again.\n")
+				fmt.Println("Your input data is invalid. Try again.")
 			}
 			if !isValidEmail {
-				fmt.Println("Your input data is invalid. Try again.\n")
+				fmt.Println("Your input data is invalid. Try again.")
 			}
 			if !isValidNumTickets {
-				fmt.Println("Your input data is invalid. Try again.\n")
+				fmt.Println("Your input data is invalid. Try again.")
 			}
 
 		}
 	}
 
+}
+
+func greetUsers(conferenceName string, conferenceTickets int, remainingTickets uint) {
+
+	fmt.Printf("Conference Tickests is %T, Remainig tickets is %T, Conference name is %T.\n", conferenceTickets, remainingTickets, conferenceName)
+
+	fmt.Printf("Welcome to %v booking application.\n", conferenceName)
+	fmt.Printf("We have a total of %v and %v are available.\n", conferenceTickets, remainingTickets)
+	fmt.Println("Get your shit here:")
+
+}
+
+func getFirstNames(bookings []string) []string {
+
+	firstNames := []string{}
+
+	for _, booking := range bookings {
+
+		var names = strings.Fields(booking)
+		firstNames = append(firstNames, names[0])
+	}
+	return firstNames
 }
