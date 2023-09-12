@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gobooking/helper"
 	"strings"
 )
 
@@ -17,7 +18,7 @@ func main() {
 
 	firstName, lastName, email, userTickets, city := getUserInput()
 
-	isValidName, isValidEmail, isValidNumTickets := validateUserInput(firstName, lastName, email, userTickets, remainingTickets)
+	isValidName, isValidEmail, isValidNumTickets := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
 	for {
 
@@ -36,7 +37,7 @@ func main() {
 
 		if isValidName && isValidEmail && isValidNumTickets {
 
-			bookTicket(remainingTickets, userTickets, firstName, lastName, email, conferenceName)
+			bookTicket(userTickets, firstName, lastName, email)
 
 			var firstNames = getFirstNames()
 
@@ -86,17 +87,6 @@ func getFirstNames() []string {
 	return firstNames
 }
 
-func validateUserInput(firstName string, lastName string, email string, userTickets int, remainingTickets uint) (bool, bool, bool) {
-
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-
-	isValidEmail := strings.Contains(email, "@")
-
-	isValidNumTickets := userTickets >= 0 && userTickets <= int(remainingTickets)
-
-	return isValidName, isValidEmail, isValidNumTickets
-}
-
 func getUserInput() (string, string, string, int, string) {
 	var firstName string
 	var lastName string
@@ -127,7 +117,7 @@ func getUserInput() (string, string, string, int, string) {
 	return firstName, lastName, email, userTickets, city
 }
 
-func bookTicket(remainingTickets uint, userTickets int, firstName string, lastName string, email string, conferenceName string) {
+func bookTicket(userTickets int, firstName string, lastName string, email string) {
 
 	remainingTickets = remainingTickets - uint(userTickets)
 
