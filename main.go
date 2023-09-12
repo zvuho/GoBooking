@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"sync"
+	"time"
 )
 
 const conferenceTickets = 50
@@ -17,6 +19,8 @@ type UserData struct {
 	userTickets uint
 }
 
+var wg = sync.WaitGroup{}
+
 func main() {
 
 	greetUsers()
@@ -25,50 +29,47 @@ func main() {
 
 	isValidName, isValidEmail, isValidNumTickets := validateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
-	for {
-
-		switch city {
-		case "London", "Berlin":
-			//exec code
-		case "Singapore", "Hong Kong":
-			//exec other code
-		case "New York":
-			//exec code for London conference
-		case "Mexico City":
-			//exec code for London conference
-		default:
-			fmt.Println("No valid city selected")
-		}
-
-		if isValidName && isValidEmail && isValidNumTickets {
-
-			bookTicket(userTickets, firstName, lastName, email)
-			sendTicket(userTickets, firstName, lastName, email)
-
-			var firstNames = getFirstNames()
-
-			fmt.Printf("The first names of bookings are %v \n", firstNames)
-
-			noTicketsLeft := remainingTickets == 0
-			if noTicketsLeft {
-				fmt.Printf("The %v is booked out", conferenceName)
-				break
-			}
-
-		} else {
-			if !isValidName {
-				fmt.Println("Your input data is invalid. Try again.")
-			}
-			if !isValidEmail {
-				fmt.Println("Your input data is invalid. Try again.")
-			}
-			if !isValidNumTickets {
-				fmt.Println("Your input data is invalid. Try again.")
-			}
-
-		}
+	switch city {
+	case "London", "Berlin":
+		//exec code
+	case "Singapore", "Hong Kong":
+		//exec other code
+	case "New York":
+		//exec code for London conference
+	case "Mexico City":
+		//exec code for London conference
+	default:
+		fmt.Println("No valid city selected")
 	}
 
+	if isValidName && isValidEmail && isValidNumTickets {
+
+		bookTicket(userTickets, firstName, lastName, email)
+		wg.Add(1) // only one wg needed for send ticket
+		go sendTicket(userTickets, firstName, lastName, email)
+
+		var firstNames = getFirstNames()
+
+		fmt.Printf("The first names of bookings are %v \n", firstNames)
+
+		noTicketsLeft := remainingTickets == 0
+		if noTicketsLeft {
+			fmt.Printf("The %v is booked out", conferenceName)
+		}
+
+	} else {
+		if !isValidName {
+			fmt.Println("Your input data is invalid. Try again.")
+		}
+		if !isValidEmail {
+			fmt.Println("Your input data is invalid. Try again.")
+		}
+		if !isValidNumTickets {
+			fmt.Println("Your input data is invalid. Try again.")
+		}
+
+	}
+	wg.Wait()
 }
 
 func greetUsers() {
@@ -140,7 +141,8 @@ func bookTicket(userTickets uint, firstName string, lastName string, email strin
 
 }
 func sendTicket(userTickets uint, firstName string, lastName string, email string) {
+	time.Sleep(10 * time.Second)
 	var ticket = fmt.Sprintf("%v tickets for %v %v \n", userTickets, firstName, lastName)
 	fmt.Printf("Sending ticket:\n %v\n To email %v\n", ticket, email)
-
+	wg.Done() //finaliza el estado de espera para este thread
 }
